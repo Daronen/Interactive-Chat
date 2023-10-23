@@ -4,8 +4,8 @@ import keyboard
 import pydirectinput
 import pyautogui
 import TwitchPlays_Connection
-from TwitchPlays_KeyCodes_DellLaptop import *
-#from TwitchPlays_KeyCodes import *
+#from TwitchPlays_KeyCodes_DellLaptop import *
+from TwitchPlays_KeyCodes import *
 
 
 def handle_message(message, command_data):
@@ -16,7 +16,7 @@ def handle_message(message, command_data):
         print("Got this message from " + username + ": " + msg)
         """  
         commands = {
-            "up": {"HR": [{"key": W, "time": 1}]}
+            "up": {"HR": [{"key": W, "time": 1}, {"key": T, "time": 1}]}
             "down": {"HR": [{"key": S, "time": 1}]},
             "left": {"HR": [A]},
             "right": {"HR": [D]},
