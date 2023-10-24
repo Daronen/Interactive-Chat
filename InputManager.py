@@ -13,11 +13,6 @@ shoot right  R:U-J-H  H:K
 be a man  R:U-J-H-K
 '''
 
-
-#write/save input into dictionary (in progress..)
-def writeFile(inputDic, inputCommand):
-  return 
-
 #read/load input from file and transfer to dictionary
 #@inputFile - name of file
 #return - dictionary
@@ -29,6 +24,7 @@ def readFile(inputFile):
       inputName, inputCommands = line[0], line[1]
       inputList[inputName] = readCommands(inputCommands, ":")
   return inputList
+
 
 #read commands string and transfer to dictionary
 #Note: each command keys are stored as a variable name (output will show binary convertion of the hex value of key that was assign to it)
@@ -45,11 +41,44 @@ def readCommands(inputCommands, splitBy):
     commandList[commandType] = keyList
   return commandList
 
+#add command to dictionary
+def addCommand(inputDic, inputName, inputType, inputKey):
+  if searchCommand(inputDic, inputName, inputType):
+    inputDic[inputName][inputType].append(globals()[inputKey]) 
+  else:
+    inputDic[inputName][inputType] = []
+    inputDic[inputName][inputType].append(globals()[inputKey]) 
+
+#search if command exist in the dictionary
+def searchCommand(inputDic, inputName, inputType):
+  isExist = False
+  if inputName in inputDic:
+    print(inputName)
+    if inputType in inputDic[inputName]:
+      isExist = True
+  return isExist
+
+#remove command from dictionary (in progress ...)
+#Note: if doesn't inputKey doesn't exist in array list, it remove the inputType dictionary
+#      if doesn't inputType doesn't exist in dictionary, it remove the inputName dictionary
+def removeCommand(inputDic, inputName, inputType, inputKey):
+  if inputType in inputDic[inputName]:
+    if globals()[inputKey] in inputDic[inputName][inputType]:  
+      
+      #remove first element similar to inputType
+      inputDic[inputName][inputType].remove(globals()[inputKey])
+    else:
+      del inputDic[inputName][inputType]
+  else:
+    del inputDic[inputName]
+  
+
 #print formated version of dictionary
 def print_command(dct):
   print("Command List:")
   for inputName, inputCommand in dct.items():  # dct.iteritems() in Python 2
     print("{} {}".format(inputName, inputCommand))
+
 
 #Print variable name
 #https://stackoverflow.com/questions/592746/how-can-you-print-a-variable-name-in-python
