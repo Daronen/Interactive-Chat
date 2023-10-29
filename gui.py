@@ -36,17 +36,21 @@ def MapWindow():
 
   while True:
     event, values = newWindow.read()
+
+    #exit the window
     if event in (sg.WINDOW_CLOSED, "Exit"):
       break
+
+    #add a new key-phrase pair
     if event == "ADD":
       InputManager.addCommand(mappings, values["Phrase-"], "HR", values['Combo-'])
-      #mappings.update({values["Phrase-"]: values['Combo-']} )
       sg.popup(mappings)
   newWindow.close()
 
 
 
-#call/run python program to start listening to the designated channel's chat
+#call python program to start listening to the designated channel's chat
+#loads a new window to interact with the user
 def startWatching():
   chatLayout = [
     [sg.Text("Enter a channel name then select the Type of Channel")],
@@ -59,16 +63,22 @@ def startWatching():
 
   while True:
     event, values = newWindow.read()
+
+    #Exiting window
     if event in (sg.WINDOW_CLOSED, "Exit"):
       break
+
+    # user chose to stream on twitch
     if event == "Twitch" and values["Channel_Name"] != "":
       TwitchPlays_InteractiveChat.TwitchPlaysStart(mappings, values["Channel_Name"])
       newWindow.close()
 
+    # user chose to stream on youtube
     if event == "YouTube" and values["Channel_Name"] != "":
       sg.popup("Not implemented yet")
       newWindow.close()
 
+    # user chose to stream on twitch and youtube
     if event == "Twitch and Youtube" and values["Channel_Name"] != "":
       sg.popup("Not implemented yet")
       newWindow.close()
@@ -79,16 +89,27 @@ def startWatching():
 
 while True:
     event, values = window.read()
+
+    #Exiting program
     if event in (sg.WINDOW_CLOSED, "Exit"):
       break
+    
+    # user chose the map buttons to phrases
     if event == 'map':
       MapWindow()
+    
+    # user chose to get keybinds from a saved file
     if event == "IN-":
       mappings = InputManager.readFile(values["IN-"])
       InputManager.print_command(mappings)
+
+    # user chose to view all current key-phrase mappings
     if event == "View":
       sg.popup(InputManager.print_command(mappings))
+    
+    # user chose to begin the chat process
     if event == "Start-":
+      window.close()
       startWatching()
 
 window.close()
