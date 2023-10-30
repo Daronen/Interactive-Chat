@@ -13,9 +13,9 @@ sg.theme('DarkGrey13')
 layout = [
     [sg.Image('interactive_chat_banner_black.png')],
     [sg.Button("Map Buttons to Phrases", key= 'map', font=large_font)],
-    [sg.Text("Load Buttons From File", font=large_font), sg.Input(key="IN-"), sg.FileBrowse()],
+    [sg.Text("Load Buttons From File", font=large_font), sg.Input(key="IN-"), sg.FileBrowse(font=large_font)],
     [sg.Button("See Current Mappings", key="View", font=large_font)],
-    [sg.Button("Start Program", key= "Start-", font=large_font), sg.Exit()],
+    [sg.Button("Start Program", key= "Start-", font=large_font), sg.Exit(font=large_font)],
 ]
 
 window = sg.Window("Interactive Chat", layout)
