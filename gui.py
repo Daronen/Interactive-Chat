@@ -6,11 +6,16 @@ mappings = {}
 Twitch_Channel = ""
 Youtube_Channel = ""
 
+large_font = ("Consolas Bold", 24)
+
+sg.theme('DarkGrey13')
+
 layout = [
-    [sg.Button("Map Buttons to Phrases", key= 'map')],
-    [sg.Text("Load Buttons From File"), sg.Input(key="IN-"), sg.FileBrowse()],
-    [sg.Button("See Current Mappings", key="View")],
-    [sg.Button("Start Program", key= "Start-"), sg.Exit()],
+    [sg.Image('interactive_chat_banner_black.png')],
+    [sg.Button("Map Buttons to Phrases", key= 'map', font=large_font)],
+    [sg.Text("Load Buttons From File", font=large_font), sg.Input(key="IN-"), sg.FileBrowse()],
+    [sg.Button("See Current Mappings", key="View", font=large_font)],
+    [sg.Button("Start Program", key= "Start-", font=large_font), sg.Exit()],
 ]
 
 window = sg.Window("Interactive Chat", layout)
