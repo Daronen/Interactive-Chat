@@ -18,8 +18,11 @@ be a man  R:U-J-H-K
 #return - dictionary
 def readFile(inputFile):
   inputList = {}
+  #starting reading file
   with open(inputFile, "r") as file:
+    #get each file line by line
     for line in file:
+      #split line of string from, command name : command dectionary
       line = line.strip().split("  ", 1)      
       inputName, inputCommands = line[0], line[1]
       inputList[inputName] = readCommands(inputCommands, ":")
@@ -29,7 +32,7 @@ def readFile(inputFile):
 #read commands string and transfer to dictionary
 #Note: each command keys are stored as a variable name (output will show binary convertion of the hex value of key that was assign to it)
 #@inputCommands - string of commands
-#@splitBy - probably don't need
+#@splitBy - probably don't need, but split string by certain character
 #return dictionary of type of commands with array list of keys
 def readCommands(inputCommands, splitBy):
   commandList = {}
@@ -37,17 +40,40 @@ def readCommands(inputCommands, splitBy):
     commandType, keys = line.split(splitBy)
     keyList = keys.split("-")
     for i, char in enumerate(keyList):
-      keyList[i] = globals()[char]
+      keyList[i] = char
+      #print(varname(globals()[]))
     commandList[commandType] = keyList
   return commandList
+  
+#
+def writeCommand(fileName, inputDic):
+  file = open(fileName, "a")
+  for commandKey in inputDic:
+    curStr = commandKey;
+    for commandType in inputDic[commandKey]:
+      curStr =  curStr + "  " + commandType + ":";
+      for idx, keys in enumerate(inputDic[commandKey][commandType]):
+        if idx != 0:
+          curStr = curStr + "-"
+        curStr = curStr + keys 
+    file.write(curStr + "\n")
+  file.close      
+
 
 #add command to dictionary
 def addCommand(inputDic, inputName, inputType, inputKey):
   if searchCommand(inputDic, inputName, inputType):
-    inputDic[inputName][inputType].append(globals()[inputKey]) 
+    inputDic[inputName][inputType].append(inputKey) 
   else:
-    inputDic[inputName][inputType] = []
-    inputDic[inputName][inputType].append(globals()[inputKey]) 
+    if inputName not in inputDic:
+      inputDic[inputName] = {inputType: [inputKey]}
+    else:
+      if inputType not in inputDic[inputName]:
+        inputDic[inputName][inputType] = [inputKey]
+      else:
+        inputDic[inputName][inputType] = []
+        inputDic[inputName][inputType].append(globals()[inputKey]) 
+  
 
 #search if command exist in the dictionary
 def searchCommand(inputDic, inputName, inputType):
@@ -59,14 +85,14 @@ def searchCommand(inputDic, inputName, inputType):
   return isExist
 
 #remove command from dictionary (in progress ...)
-#Note: if doesn't inputKey doesn't exist in array list, it remove the inputType dictionary
-#      if doesn't inputType doesn't exist in dictionary, it remove the inputName dictionary
+#Note: if inputKey doesn't exist in array list, it remove the inputType dictionary
+#      if inputType doesn't exist in dictionary, it remove the inputName dictionary
 def removeCommand(inputDic, inputName, inputType, inputKey):
   if inputType in inputDic[inputName]:
     if globals()[inputKey] in inputDic[inputName][inputType]:  
       
       #remove first element similar to inputType
-      inputDic[inputName][inputType].remove(globals()[inputKey])
+      inputDic[inputName][inputType].remove(inputKey)
     else:
       del inputDic[inputName][inputType]
   else:
@@ -76,7 +102,7 @@ def removeCommand(inputDic, inputName, inputType, inputKey):
 #print formated version of dictionary
 def print_command(dct):
   print("Command List:")
-  for inputName, inputCommand in dct.items():  # dct.iteritems() in Python 2
+  for inputName, inputCommand in dct.items():  
     print("{} {}".format(inputName, inputCommand))
 
 
