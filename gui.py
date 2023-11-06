@@ -29,7 +29,7 @@ if MAXIMIZE_SCREEN:
   window = sg.Window("Interactive Chat", layout, font=large_font, finalize=True)
   window.maximize()
 else:
-  window = sg.Window("Interactive Chat", layout, font=large_font)
+  window = sg.Window("Interactive Chat", layout)
 
 
 
@@ -37,9 +37,10 @@ else:
 def MapWindow():
   #may want to add more keyboard options
   options = [ "--", "Choose an option",
-           "Q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
-           "a", "s", "d", "f", "g", "h", "j", "k", "l",
-           "z", "x", "c", "v", "b", "n", "m"
+           "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=",
+           "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]",
+           "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'",
+           "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"
            ]
   dropdown = sg.Combo(options, key='Combo-')
   layout2 = [
@@ -63,7 +64,7 @@ def MapWindow():
       break
 
     #add a new key-phrase pair
-    if event == "ADD":
+    if event == "ADD" and values["Phrase-"] != "":
       InputManager.addCommand(mappings, values["Phrase-"], "HR", values['Combo-'])
   newWindow.close()
 
@@ -109,11 +110,35 @@ def startWatching():
 
   newWindow.close()
 
+
+#after inputting a name for the file, calls InputManager.writeFile with the input filename + ".txt"
 def saveFile():
-  sg.popup("Still Developing")
-  savedFile = True
-  #writeFile(filename, mappings)
-  return
+  save_layout = [
+    [sg.Text("Filename"), sg.Input(key="Filename-")],
+    [sg.Button("Save", key= "SAVE")],
+    [sg.Exit()],
+  ]
+  if MAXIMIZE_SCREEN:
+    newWindow = sg.Window("Save File", save_layout, font=large_font, finalize=True)
+    newWindow.maximize()
+  else:
+    newWindow = sg.Window("Save File", save_layout)
+
+  while True:
+    event, values = newWindow.read()
+
+    #exit the window
+    if event in (sg.WINDOW_CLOSED, "Exit"):
+      break
+
+    #add a new key-phrase pair
+    if event == "SAVE" and values["Filename-"] != "":      
+      filenametxt = values["Filename-"] + ".txt"
+      InputManager.writeFile(filenametxt, mappings)
+      savedFile = True
+      break
+
+  newWindow.close()
 
 if __name__=="__main__": 
   while True:
@@ -133,17 +158,22 @@ if __name__=="__main__":
 
     # user chose to view all current key-phrase mappings
     if event == "View":
-      sg.popup(mappings)
+      currstr = ""
+      for inputName, inputCommand in mappings.items():
+        currstr += str(inputName) + " " + str(inputCommand) + "\n"
+      sg.popup(currstr)
     
     # user chose to begin the chat process
     if event == "Start-":
       window.close()
       if not savedFile:
-        print("testing")
-        #InputManager.writeFile(filename, mappings)
+        saveFile()
       startWatching()
       
-    if event == "Save":
-      saveFile()   ####needs to be implemented
+    if event == "Save" and mappings != {}:
+      saveFile()
+    else:
+      if event == "Save" and mappings == {}:
+        sg.popup("ERROR! Must have key-pairs before saving them as a file")
 
 window.close()
