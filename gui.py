@@ -6,6 +6,8 @@ mappings = {}
 Twitch_Channel = ""
 Youtube_Channel = ""
 
+savedFile = False
+
 large_font = ("Consolas Bold", 21)
 
 sg.theme('DarkGrey13')
@@ -19,6 +21,7 @@ layout = [
     [sg.Text("Load Buttons From File"), sg.Input(key="IN-"), sg.FileBrowse()],
     [sg.Button("Load From File", key="Load-")],
     [sg.Button("See Current Mappings", key="View")],
+    [sg.Button("Save Key-Pairs to File", key="Save")],
     [sg.Button("Start Program", key= "Start-"), sg.Exit()],
 ]
 
@@ -106,8 +109,14 @@ def startWatching():
 
   newWindow.close()
 
+def saveFile():
+  sg.popup("Still Developing")
+  savedFile = True
+  #writeFile(filename, mappings)
+  return
 
-while True:
+if __name__=="__main__": 
+  while True:
     event, values = window.read()
 
     #Exiting program
@@ -129,7 +138,12 @@ while True:
     # user chose to begin the chat process
     if event == "Start-":
       window.close()
-      #########################################add a save file thing here
+      if not savedFile:
+        print("testing")
+        #InputManager.writeFile(filename, mappings)
       startWatching()
+      
+    if event == "Save":
+      saveFile()   ####needs to be implemented
 
 window.close()

@@ -160,5 +160,5 @@ commands = {
     "shoot right": {"R": [U, J, H], "H": [K]},
     "be a man": {"R": [U, J, H, K]}
     }
-TwitchPlaysStart(commands, Twitch_Channel = "wizardwolf26", Streaming_on_Twitch = True, End_keys = 'shift+backspace')
+#TwitchPlaysStart(commands, Twitch_Channel = "wizardwolf26", Streaming_on_Twitch = True, End_keys = 'shift+backspace')
 
