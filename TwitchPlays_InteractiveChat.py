@@ -38,17 +38,17 @@ def handle_message(message, command_data):
         for keypresses in command:
             if(keypresses == "HR"):
                 for key in command[keypresses]:
-                    HoldAndReleaseKey(key, .3)
+                    HoldAndReleaseKey(globals()[key], .3)
 
             if (keypresses == "R"):
                 for key in command[keypresses]:
                     print("release:", key)
-                    ReleaseKey(key)
+                    ReleaseKey(globals()[key])
 
             if (keypresses == "H"):
                 for key in command[keypresses]:
                     print("hold:", key)
-                    HoldKey(key)
+                    HoldKey(globals()[key])
 
     except Exception as e:
         print("Encountered exception: " + str(e))
@@ -148,7 +148,7 @@ def TwitchPlaysStart(commands, Twitch_Channel = "exampe", Streaming_on_Twitch = 
                     print(f'WARNING: active tasks ({len(active_tasks)}) exceeds number of workers ({MAX_WORKERS}). ({len(message_queue)} messages in the queue)')
  
 
-
+"""
 commands = {
     "up": {"HR": [W]},
     "down": {"HR": [S]},
@@ -160,5 +160,5 @@ commands = {
     "shoot right": {"R": [U, J, H], "H": [K]},
     "be a man": {"R": [U, J, H, K]}
     }
-#TwitchPlaysStart(commands, Twitch_Channel = "wizardwolf26", Streaming_on_Twitch = True, End_keys = 'shift+backspace')
+TwitchPlaysStart(commands, Twitch_Channel = "wizardwolf26", Streaming_on_Twitch = True, End_keys = 'shift+backspace')"""
 
