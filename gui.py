@@ -6,20 +6,26 @@ mappings = {}
 Twitch_Channel = ""
 Youtube_Channel = ""
 
-large_font = ("Consolas Bold", 24)
-
+large_font = ("Consolas Bold", 21)
 sg.theme('DarkGrey13')
+
+""" MAXIMIZE SCREEN """
+MAXIMIZE_SCREEN = False
+
 
 layout = [
     [sg.Image('interactive_chat_banner_black.png')],
-    [sg.Button("Map Buttons to Phrases", key= 'map', font=large_font)],
-    [sg.Text("Load Buttons From File", font=large_font), sg.Input(key="IN-"), sg.FileBrowse(font=large_font)],
-    [sg.Button("See Current Mappings", key="View", font=large_font)],
-    [sg.Button("Start Program", key= "Start-", font=large_font), sg.Exit(font=large_font)],
+    [sg.Button("Map Buttons to Phrases", key= 'map')],
+    [sg.Text("Load Buttons From File"), sg.Input(key="IN-"), sg.FileBrowse()],
+    [sg.Button("See Current Mappings", key="View")],
+    [sg.Button("Start Program", key= "Start-"), sg.Exit()],
 ]
 
-window = sg.Window("Interactive Chat", layout)
-
+if MAXIMIZE_SCREEN:
+  window = sg.Window("Interactive Chat", layout, font=large_font, finalize=True)
+  window.maximize()
+else:
+  window = sg.Window("Interactive Chat", layout, font=large_font)
 
 
 #Opens a new window in order to add new phrase-key pairings to the dictionary
@@ -37,7 +43,11 @@ def MapWindow():
     [sg.Button("Add", key= "ADD")],
     [sg.Exit()],
   ]
-  newWindow = sg.Window("Mapping", layout2)
+  if MAXIMIZE_SCREEN:
+    newWindow = sg.Window("Mapping", layout2, font=large_font, finalize=True)
+    newWindow.maximize()
+  else:
+    newWindow = sg.Window("Mapping", layout2, font=large_font)
 
   while True:
     event, values = newWindow.read()
@@ -64,7 +74,11 @@ def startWatching():
     [sg.Button("Twitch", key="Twitch"), sg.Button("YouTube", key="YouTube"), sg.Button("Both", key="Twitch and Youtube")],
     [sg.Exit()]
   ]
-  newWindow = sg.Window("Chat name", chatLayout)
+  if MAXIMIZE_SCREEN:
+    newWindow = sg.Window("Chat name", chatLayout, font=large_font, finalize=True)
+    newWindow.maximize()
+  else:
+    newWindow = sg.Window("Chat name", chatLayout, font=large_font)
 
   while True:
     event, values = newWindow.read()
