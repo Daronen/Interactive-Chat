@@ -7,6 +7,7 @@ Twitch_Channel = ""
 Youtube_Channel = ""
 
 savedFile = False
+defaultFilename = "key-pairs.txt"
 
 large_font = ("Consolas Bold", 21)
 
@@ -35,16 +36,10 @@ else:
 
 #Opens a new window in order to add new phrase-key pairings to the dictionary
 def MapWindow():
-  #may want to add more keyboard options
-  options = [ "--", "Choose an option",
-           "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=",
-           "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]",
-           "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'",
-           "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"
-           ]
-  dropdown = sg.Combo(options, key='Combo-')
   layout2 = [
-    [[sg.Text("Add")], dropdown],
+    [sg.Text("Add Key or Keys separated by spaces"), sg.Input(key="HKey-"), sg.Text("As a held key")],
+    [sg.Text("Add Key or Keys separated by spaces"), sg.Input(key="RKey-"), sg.Text("As a released key")],
+    [sg.Text("Add Key or Keys separated by spaces"), sg.Input(key="HRKey-"), sg.Text("As a held and released key")],
     [sg.Text("With Phrase"), sg.Input(key="Phrase-")],
     [sg.Button("Add", key= "ADD")],
     [sg.Exit()],
@@ -65,7 +60,18 @@ def MapWindow():
 
     #add a new key-phrase pair
     if event == "ADD" and values["Phrase-"] != "":
-      InputManager.addCommand(mappings, values["Phrase-"], "HR", values['Combo-'])
+      #new key-phrase contains a Hold
+      if values["HKey-"] != "":
+        InputManager.addCommand(mappings, values["Phrase-"], "H", values["HKey-"])
+
+      #new key-phrase contains a Release
+      if values["RKey-"] != "":
+        InputManager.addCommand(mappings, values["Phrase-"], "R", values["RKey-"])
+      
+      #new key-phrase contains a Hold and Release
+      if values["HRKey-"] != "":
+        InputManager.addCommand(mappings, values["Phrase-"], "HR", values["HRKey-"])
+
   newWindow.close()
 
 
@@ -105,6 +111,7 @@ def startWatching():
 
     # user chose to stream on twitch and youtube
     if event == "Twitch and Youtube" and values["Channel_Name"] != "":
+      #fork then call both youtube and twitch chats?
       sg.popup("Not implemented yet")
       newWindow.close()
 
@@ -153,7 +160,7 @@ if __name__=="__main__":
       MapWindow()
     
     # user chose to get keybinds from a saved file
-    if event == "IN-" or event == "Load-":
+    if values["IN-"] != "" and event == "Load-":
       mappings = InputManager.readFile(values["IN-"])
 
     # user chose to view all current key-phrase mappings
@@ -167,13 +174,13 @@ if __name__=="__main__":
     if event == "Start-":
       window.close()
       if not savedFile:
-        saveFile()
+        InputManager.writeFile(defaultFilename, mappings)
       startWatching()
       
     if event == "Save" and mappings != {}:
       saveFile()
     else:
       if event == "Save" and mappings == {}:
-        sg.popup("ERROR! Must have key-pairs before saving them as a file")
+        sg.popup("Must have key-pairs before saving them as a file")
 
 window.close()
