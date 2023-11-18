@@ -14,7 +14,7 @@ large_font = ("Consolas Bold", 21)
 sg.theme('DarkGrey13')
 
 """MAXIMIZE SCREEN"""
-MAXIMIZE_SCREEN = False
+MAXIMIZE_SCREEN = True
 
 layout = [
     [sg.Image('interactive_chat_banner_black.png')],
@@ -30,16 +30,17 @@ if MAXIMIZE_SCREEN:
   window = sg.Window("Interactive Chat", layout, font=large_font, finalize=True)
   window.maximize()
 else:
-  window = sg.Window("Interactive Chat", layout)
+  window = sg.Window("Interactive Chat", layout, font=large_font)
 
 
 
 #Opens a new window in order to add new phrase-key pairings to the dictionary
 def MapWindow():
   layout2 = [
-    [sg.Text("Add Key or Keys separated by spaces"), sg.Input(key="HKey-"), sg.Text("As a held key")],
-    [sg.Text("Add Key or Keys separated by spaces"), sg.Input(key="RKey-"), sg.Text("As a released key")],
-    [sg.Text("Add Key or Keys separated by spaces"), sg.Input(key="HRKey-"), sg.Text("As a held and released key")],
+    [sg.Text("Add Key or Keys separated by spaces")],
+    [sg.Input(key="HKey-"), sg.Text("As a held key")],
+    [sg.Input(key="RKey-"), sg.Text("As a released key")],
+    [sg.Input(key="HRKey-"), sg.Text("As a held and released key")],
     [sg.Text("With Phrase"), sg.Input(key="Phrase-")],
     [sg.Button("Add", key= "ADD")],
     [sg.Exit()],
@@ -48,7 +49,7 @@ def MapWindow():
     newWindow = sg.Window("Mapping", layout2, font=large_font, finalize=True)
     newWindow.maximize()
   else:
-    newWindow = sg.Window("Mapping", layout2)
+    newWindow = sg.Window("Mapping", layout2, font=large_font)
 
 
   while True:
@@ -60,17 +61,21 @@ def MapWindow():
 
     #add a new key-phrase pair
     if event == "ADD" and values["Phrase-"] != "":
+
       #new key-phrase contains a Hold
       if values["HKey-"] != "":
-        InputManager.addCommand(mappings, values["Phrase-"], "H", values["HKey-"])
+        for indices in values["HKey-"]:
+          InputManager.addCommand(mappings, values["Phrase-"], "H", indices)
 
       #new key-phrase contains a Release
       if values["RKey-"] != "":
-        InputManager.addCommand(mappings, values["Phrase-"], "R", values["RKey-"])
+        for indices in values["RKey-"]:
+          InputManager.addCommand(mappings, values["Phrase-"], "R", indices)
       
       #new key-phrase contains a Hold and Release
       if values["HRKey-"] != "":
-        InputManager.addCommand(mappings, values["Phrase-"], "HR", values["HRKey-"])
+        for indices in values["HRKey-"]:
+          InputManager.addCommand(mappings, values["Phrase-"], "HR", indices)
 
   newWindow.close()
 
@@ -129,7 +134,7 @@ def saveFile():
     newWindow = sg.Window("Save File", save_layout, font=large_font, finalize=True)
     newWindow.maximize()
   else:
-    newWindow = sg.Window("Save File", save_layout)
+    newWindow = sg.Window("Save File", save_layout, font=large_font)
 
   while True:
     event, values = newWindow.read()
@@ -168,7 +173,10 @@ if __name__=="__main__":
       currstr = ""
       for inputName, inputCommand in mappings.items():
         currstr += str(inputName) + " " + str(inputCommand) + "\n"
-      sg.popup(currstr)
+      if currstr == "":
+        sg.popup("No key-pairings made")
+      else:
+        sg.popup(currstr)
     
     # user chose to begin the chat process
     if event == "Start-":
