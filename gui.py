@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import TwitchPlays_InteractiveChat as twitchPlays
 import InputManager
+import threading
 
 mappings = {}
 Twitch_Channel = ""
@@ -117,8 +118,17 @@ def startWatching():
     # user chose to stream on twitch and youtube
     if event == "Twitch and Youtube" and values["Channel_Name"] != "":
       #fork then call both youtube and twitch chats?
-      sg.popup("Not implemented yet")
+      t1 = threading.Thread(target=twitchPlays.TwitchPlaysStart, args=(mappings, values["Channel_Name"],))
+      
       newWindow.close()
+      t1.start()
+
+      if(t1):
+        #YouTube code here
+        sg.popup("Not implemented yet")
+
+      t1.join()
+
 
   newWindow.close()
 
