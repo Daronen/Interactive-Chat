@@ -7,7 +7,7 @@ Twitch_Channel = ""
 Youtube_Channel = ""
 
 savedFile = False
-defaultFilename = "key-pairs.txt"
+defaultFilename = "key-pairs.ini"
 
 large_font = ("Consolas Bold", 21)
 
@@ -37,7 +37,7 @@ else:
 #Opens a new window in order to add new phrase-key pairings to the dictionary
 def MapWindow():
   layout2 = [
-    [sg.Text("Add Key or Keys separated by spaces")],
+    [sg.Text("Add Key or Keys")],
     [sg.Input(key="HKey-"), sg.Text("As a held key")],
     [sg.Input(key="RKey-"), sg.Text("As a released key")],
     [sg.Input(key="HRKey-"), sg.Text("As a held and released key")],
@@ -65,17 +65,17 @@ def MapWindow():
       #new key-phrase contains a Hold
       if values["HKey-"] != "":
         for indices in values["HKey-"]:
-          InputManager.addCommand(mappings, values["Phrase-"], "H", indices)
+            InputManager.addCommand(mappings, values["Phrase-"].lower(), "H", indices.upper())
 
       #new key-phrase contains a Release
       if values["RKey-"] != "":
         for indices in values["RKey-"]:
-          InputManager.addCommand(mappings, values["Phrase-"], "R", indices)
+          InputManager.addCommand(mappings, values["Phrase-"].lower(), "R", indices.upper())
       
       #new key-phrase contains a Hold and Release
       if values["HRKey-"] != "":
         for indices in values["HRKey-"]:
-          InputManager.addCommand(mappings, values["Phrase-"], "HR", indices)
+          InputManager.addCommand(mappings, values["Phrase-"].lower(), "HR", indices.upper())
 
   newWindow.close()
 
@@ -123,7 +123,7 @@ def startWatching():
   newWindow.close()
 
 
-#after inputting a name for the file, calls InputManager.writeFile with the input filename + ".txt"
+#after inputting a name for the file, calls InputManager.writeFile with the input filename + ".ini"
 def saveFile():
   save_layout = [
     [sg.Text("Filename"), sg.Input(key="Filename-")],
@@ -145,7 +145,7 @@ def saveFile():
 
     #add a new key-phrase pair
     if event == "SAVE" and values["Filename-"] != "":      
-      filenametxt = values["Filename-"] + ".txt"
+      filenametxt = values["Filename-"] + ".ini"
       InputManager.writeFile(filenametxt, mappings)
       savedFile = True
       break
