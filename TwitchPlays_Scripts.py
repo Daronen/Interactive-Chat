@@ -1,7 +1,5 @@
 import time
 import keyboard
-import threading
-import sys
 
 def reverseKeyPressRun(time_run):
     keyboard.remap_hotkey("w", "s")
@@ -10,10 +8,8 @@ def reverseKeyPressRun(time_run):
     keyboard.remap_hotkey("a", "d")
     i=int(time.time()) + time_run
     while(time.time()<=i):
-        #print("hello")
         l=1
-        #keyboard.wait(1)
-        #print("bye")
+        
 
 #def reverseKeyPress(time):
 #reverseKeyPressRun(5)
