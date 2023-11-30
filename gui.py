@@ -43,7 +43,7 @@ def MapWindow():
     [sg.Input(key="RKey-"), sg.Text("As a released key")],
     [sg.Input(key="HRKey-"), sg.Text("As a held and released key")],
     [sg.Text("With Phrase"), sg.Input(key="Phrase-")],
-    [sg.Button("Add", key= "ADD")],
+    [sg.Button("Add", key= "ADD"), sg.Button("Remove", key= "REMOVE")],
     [sg.Exit()],
   ]
   if MAXIMIZE_SCREEN:
@@ -77,6 +77,31 @@ def MapWindow():
       if values["HRKey-"] != "":
         for indices in values["HRKey-"]:
           InputManager.addCommand(mappings, values["Phrase-"].lower(), "HR", indices.upper())
+
+
+    #Removing a key from a pair or removing a phrase
+    if event == "REMOVE" and values["Phrase-"] != "":
+      removedKey = False
+
+      if values["HKey-"] != "":
+        for indices in values["HKey-"]:
+            InputManager.removeCommand(mappings, values["Phrase-"].lower(), "H", indices.upper())
+        removedKey = True    
+
+      #new key-phrase contains a Release
+      if values["RKey-"] != "":
+        for indices in values["RKey-"]:
+          InputManager.removeCommand(mappings, values["Phrase-"].lower(), "R", indices.upper())
+        removedKey = True
+      
+      #new key-phrase contains a Hold and Release
+      if values["HRKey-"] != "":
+        for indices in values["HRKey-"]:
+          InputManager.removeCommand(mappings, values["Phrase-"].lower(), "HR", indices.upper())
+        removedKey = True
+
+      if(not removedKey):
+        InputManager.removeCommand(mappings, values["Phrase-"].lower(), "HR", None)
 
   newWindow.close()
 
@@ -189,11 +214,14 @@ if __name__=="__main__":
         sg.popup(currstr)
     
     # user chose to begin the chat process
-    if event == "Start-":
+    if event == "Start-" and mappings != {}:
       window.close()
       if not savedFile:
         InputManager.writeFile(defaultFilename, mappings)
       startWatching()
+    else:
+      if event == "Start-" and mappings == {}:
+        sg.popup("Must have key-pairs before running the program")
       
     if event == "Save" and mappings != {}:
       saveFile()
