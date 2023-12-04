@@ -1,6 +1,6 @@
 # InteractiveChat
 
-This project is built upon github.com/DougDougGithub/TwitchPlays.
+This project is built upon [DougDoug's TwitchPlays](https://github.com/DougDougGithub/TwitchPlays).
 These are the python files that allows Twitch Chat to control your keyboard or mouse to play a game.
 
 To run the program execute the `gui.py` by passing it as an argument to `python` executable in the command line, e.g. `python gui.py`.
