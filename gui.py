@@ -20,6 +20,7 @@ MAXIMIZE_SCREEN = True
 layout = [
     [sg.Image('interactive_chat_banner_black.png')],
     [sg.Button("Map Buttons to Phrases", key= 'map')],
+    [sg.Button("Map Scripts to Phrases", key= 'Script')],
     [sg.Text("Load Buttons From File"), sg.Input(key="IN-"), sg.FileBrowse()],
     [sg.Button("Load From File", key="Load-")],
     [sg.Button("See Current Mappings", key="View")],
@@ -79,7 +80,7 @@ def MapWindow():
           InputManager.addCommand(mappings, values["Phrase-"].lower(), "HR", indices.upper())
 
 
-    #Removing a key from a pair or removing a phrase
+    #Removing a key from a pair or removing a pair
     if event == "REMOVE" and values["Phrase-"] != "":
       removedKey = False
 
@@ -105,13 +106,57 @@ def MapWindow():
 
   newWindow.close()
 
+def ScriptWindow():
+  layout2 = [
+    [sg.Text("Add Scripts to phrase")],
+    [sg.Text("Load Script From File"), sg.Input(key="IN-"), sg.FileBrowse()],
+    [sg.Text("With Phrase"), sg.Input(key="Phrase-")],
+    [sg.Button("Add", key= "ADD"), sg.Button("Remove", key= "REMOVE")],
+    [sg.Exit()],
+  ]
+  if MAXIMIZE_SCREEN:
+    newWindow = sg.Window("Script Mapping", layout2, font=large_font, finalize=True)
+    newWindow.maximize()
+  else:
+    newWindow = sg.Window("Mapping", layout2, font=large_font)
+
+
+  while True:
+    event, values = newWindow.read()
+
+    #exit the window
+    if event in (sg.WINDOW_CLOSED, "Exit"):
+      break
+
+    #add a new script-phrase pair
+    if event == "ADD" and values["IN-"] != "":
+      sg.popup("Not implemented!")
+      #InputManager.addCommand(mappings, values["Phrase-"].lower(), "S", values["IN-"])
+
+    #Removing a script from a pair or removing a pair
+    if event == "REMOVE" and values["IN-"] != "":
+      sg.popup("Not implemented!")
+      """
+      removedKey = False
+
+      if values["IN-"] != "":
+        InputManager.removeCommand(mappings, values["Phrase-"].lower(), "H", values["IN-"])
+        removedKey = True    
+
+      if(not removedKey):
+        InputManager.removeCommand(mappings, values["Phrase-"].lower(), "HR", None)
+      """
+
+  newWindow.close()
+
 
 #call python program to start listening to the designated channel's chat
 #loads a new window to interact with the user
 def startWatching():
   chatLayout = [
     [sg.Text("Enter a channel name then select the Type of Channel")],
-    [sg.Text("Channel Name"), sg.Input(key="Channel_Name")],
+    [sg.Text("Twitch/YouTube Channel Name"), sg.Input(key="Channel_Name")],
+    [sg.Text("YouTube Channel Live URL"), sg.Input(key="URL")],
     [sg.Text("Channel Type:")],
     [sg.Button("Twitch", key="Twitch"), sg.Button("YouTube", key="YouTube"), sg.Button("Both", key="Twitch and Youtube")],
     [sg.Exit()]
@@ -137,8 +182,9 @@ def startWatching():
 
     # user chose to stream on youtube
     if event == "YouTube" and values["Channel_Name"] != "":
-      sg.popup("Not implemented yet")
       newWindow.close()
+      twitchPlays.TwitchPlaysStart(mappings, "", False, values["Channel_Name"], values["URL"])
+
 
     # user chose to stream on twitch and youtube
     if event == "Twitch and Youtube" and values["Channel_Name"] != "":
@@ -149,8 +195,7 @@ def startWatching():
       t1.start()
 
       if(t1):
-        #YouTube code here
-        sg.popup("Not implemented yet")
+        twitchPlays.TwitchPlaysStart(mappings, "", False, values["Channel_Name"], values["URL"])
 
       t1.join()
 
@@ -198,6 +243,10 @@ if __name__=="__main__":
     # user chose the map buttons to phrases
     if event == 'map':
       MapWindow()
+
+    # user chose to map scripts to phrases
+    if event == 'Script':
+      ScriptWindow()
     
     # user chose to get keybinds from a saved file
     if values["IN-"] != "" and event == "Load-":
