@@ -1,0 +1,9 @@
+up  HR:W
+down  HR:S
+left  HR:A
+right  HR:D
+shoot up  R:J-H-K  H:U
+shoot down  R:U-H-K  H:J
+shoot left  R:U-J-K  H:H
+shoot right  R:U-J-H  H:K
+be a man  R:U-J-H-K

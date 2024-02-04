@@ -7,13 +7,9 @@ def reverseKeyPressRun(time_run):
     keyboard.remap_hotkey("d", "a")
     keyboard.remap_hotkey("a", "d")
     i=int(time.time()) + time_run
-    while(time.time()<=i):
-        #print(time.time() - i)
+    while(time.time()-i <=-1):
         l=1
-    keyboard.remap_hotkey("w", "w")
-    keyboard.remap_hotkey("s", "s")
-    keyboard.remap_hotkey("d", "d")
-    keyboard.remap_hotkey("a", "a")
+    keyboard.unhook_all()
         
 
 #def reverseKeyPress(time):
