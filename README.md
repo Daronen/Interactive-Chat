@@ -28,4 +28,4 @@ Original:
 This code is originally based off Wituz's Twitch Plays template, then expanded by DougDoug and DDarknut with help from Ottomated for the Youtube side. For now I am not reviewing any pull requests or code changes, this code is meant to be a simple prototype that is uploaded for educational purposes. But feel free to fork the project and create your own version!
 
 UMBC School project:
-This code took the original DougDoug code and add to it for a school project done by "Daronen: Luke Z", "J03Y-Kihn", "YongLo", and  "114w". Copied from the original repository on 2/3/2024 with any updates after being done by "Daronen".
+This code took the original DougDoug code and add to it for a school project done by "Daronen: Luke Z", "J03Y-Kihn", "YongLo", and  "114w". Copied from the original repository, https://github.com/J03Y-Kihn/447InteractiveChat, on 2/3/2024 with any updates after being done by "Daronen".
